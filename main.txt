@@ -1,0 +1,121 @@
+import 'dart:math'; // Import the Dart math library
+
+// Song class to represent a song with title, artist, and duration
+class Song {
+  String title;
+  String artist;
+  int duration;
+
+  // Constructor to initialize song properties
+  Song(this.title, this.artist, this.duration);
+
+  // Function to simulate playing the song
+  void play() {
+    print('Playing: $title by $artist');
+  }
+
+  // Function to format song duration in mm:ss format
+  String formattedDuration() {
+    int minutes = duration ~/ 60;
+    int seconds = duration % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+}
+
+// Playlist class to represent a collection of songs
+class Playlist {
+  String name;
+  List<Song> songs;
+
+  // Constructor to initialize playlist name and song list
+  Playlist(this.name, [List<Song>? songs]) : songs = songs ?? [];
+
+  // Function to add a song to the playlist
+  void addSong(Song song) {
+    songs.add(song);
+  }
+
+  // Function to remove a song from the playlist
+  void removeSong(Song song) {
+    songs.remove(song);
+  }
+
+  // Function to play all songs in the playlist
+  void playAll() {
+    for (var song in songs) {
+      song.play();
+    }
+  }
+
+  // Function to calculate the total duration of the playlist
+  int totalDuration() {
+    return songs.fold(0, (sum, song) => sum + song.duration);
+  }
+}
+
+// MusicFestival class to represent a festival with multiple stages (playlists)
+class MusicFestival {
+  String name;
+  List<Playlist> stages;
+
+  // Constructor to initialize festival name and stages
+  MusicFestival(this.name, [List<Playlist>? stages]) : stages = stages ?? [];
+
+  // Function to add a stage to the festival
+  void addStage(Playlist playlist) {
+    stages.add(playlist);
+  }
+
+  // Function to remove a stage from the festival
+  void removeStage(Playlist playlist) {
+    stages.remove(playlist);
+  }
+
+  // Function to start the festival and play all songs in all stages
+  void startFestival() {
+    print('Welcome to $name!');
+    for (var stage in stages) {
+      print('Stage: ${stage.name}');
+      stage.playAll();
+    }
+  }
+
+  // Function to calculate the total duration of the entire festival
+  int totalFestivalDuration() {
+    return stages.fold(0, (sum, stage) => sum + stage.totalDuration());
+  }
+}
+
+void main() {
+  // Create song instances
+  var song1 = Song('Palagi', 'TJ Monterde', 220);
+  var song2 = Song('Sining', 'Dionela', 200);
+  var song3 = Song('Lihim', 'Arthur Miguil', 272);
+  var song4 = Song('Dive', 'Ed Sheeran', 239);
+  var song5 = Song('Shape of You', 'Ed Sheeran', 240);
+  var song6 = Song('Perfect', 'Ed Sheeran', 250);
+  var song7 = Song('Walang Kapalit', 'Arthur Miguil', 220);
+
+  // Create playlist instances
+  var popStage = Playlist('Pop Stage', [song1, song3, song5, song7]);
+  var rnbStage = Playlist('RnB Stage', [song2, song4, song6]);
+
+  // Create a music festival instance and add stages
+  var festival = MusicFestival('Pop & RnB Music Festival', [popStage, rnbStage]);
+
+  // Display total festival duration
+  print('Total Festival Duration: ${festival.totalFestivalDuration()} seconds\n');
+
+  // Random song details from both stages
+  print('Random Songs:');
+  print('Pop Stage: ${song1.title} by ${song1.artist} (${song1.formattedDuration()})');
+  print('RnB Stage: ${song4.title} by ${song4.artist} (${song4.formattedDuration()})');
+  print('Pop Stage: ${song7.title} by ${song7.artist} (${song7.formattedDuration()})\n');
+
+  // Sort and display pop stage songs by artist
+  print('Pop Stage playlist sorted by artist:');
+  popStage.songs.sort((a, b) => a.artist.compareTo(b.artist));
+  for (var song in popStage.songs) {
+    print('${song.title} by ${song.artist} (${song.formattedDuration()})');
+  }
+}
